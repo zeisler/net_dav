@@ -496,7 +496,7 @@ module Net #:nodoc:
       if(!body)
         body = '<?xml version="1.0" encoding="utf-8"?><DAV:propfind xmlns:DAV="DAV:"><DAV:allprop/></DAV:propfind>'
       end
-      res = @handler.request(:propfind, path, body, headers.merge(@headers))
+      res = @handler.request(:propfind, path, body, headers.merge(@headers).merge(options.fetch(:headers, {})))
       Nokogiri::XML.parse(res.body)
     end
 
