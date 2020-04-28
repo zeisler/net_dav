@@ -159,7 +159,7 @@ module Net #:nodoc:
         when :basic
           req.basic_auth @user, @pass
         when :digest
-          digest_auth(req, @user, @pass, response)
+          digest_auth(req, @user, @pass, @last_authentication_response)
         end
 
         response = nil
@@ -180,6 +180,7 @@ module Net #:nodoc:
         when Net::HTTPUnauthorized     then
           response.error! unless @user
           response.error! if req['authorization']
+          @last_authentication_response = response
           new_req = clone_req(req.path, req, headers)
           if response['www-authenticate'] =~ /^basic/i
             if disable_basic_auth
